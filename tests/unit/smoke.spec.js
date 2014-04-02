@@ -8,5 +8,8 @@ describe("jasmine-node", function() {
   it("should include sinon spies and matchers", function() {
   	var spy = sinon.spy();
     expect(spy).not.toHaveBeenCalled();
+    spy()
+    expect(spy).toHaveBeenCalled();
+
   });
 });
