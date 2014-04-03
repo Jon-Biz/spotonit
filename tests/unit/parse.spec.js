@@ -6,10 +6,10 @@ var proxyquire = require('proxyquire');
 var parser = require('../../modules/parser');
 
 describe("Parser|", function() {
-  xit("should exist", function() {
+  it("should exist", function() {
     expect(parser).toBeDefined();
   });
-	xit("should return an array", function() {
+	it("should return an array", function() {
 	  expect(Array.isArray(parser("<html></html>"))).toBeTruthy();
 	});
 });

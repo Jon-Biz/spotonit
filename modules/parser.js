@@ -1,5 +1,5 @@
-var jsonml = require('../public/components/jsonml/jsonml-dom');
+var jsxml = require('jsxml');
 
-module.exports = function() {
-//	return [];
+module.exports = function(input) {
+	return jsxml.fromXml(input);
 };
