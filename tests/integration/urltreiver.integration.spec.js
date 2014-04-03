@@ -1,5 +1,4 @@
 
-var proxyquire = require('proxyquire');
 
 var urltreiver = require('../../modules/urltreiver');
 var Q = require('Q');
