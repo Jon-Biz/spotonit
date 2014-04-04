@@ -6,7 +6,7 @@ var Q = require('Q');
 describe("urltreiver integration", function() {
 
 	beforeEach(function() {
-		jasmine.getEnv().defaultTimeoutInterval = 30000;	  
+		jasmine.getEnv().defaultTimeoutInterval = 50000;	  
 	});
 
 	afterEach(function() {

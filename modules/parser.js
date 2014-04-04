@@ -32,7 +32,10 @@ module.exports.getDomain = this.getDomain = function (url) {
 	}
 
 	var domainRX = new RegExp('^http://.*?(?=/)|^http://.*\.*$');
-	return (domainRX.exec(url)[0]);
+	var reg = domainRX.exec(url);
+	if(reg){
+		return reg[0];
+	}else {return false};
 }
 
 var EventTriggers = [
@@ -76,3 +79,4 @@ module.exports.isEvent = this.isEvent = function (json) {
 	return isEvent;
 
 }
+

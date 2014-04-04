@@ -1,4 +1,5 @@
 var q = require('q');
+var _ = require('lodash');
 var proxyquire = require('proxyquire');
 var sinon = require('sinon');
 require('jasmine-sinon');
@@ -10,7 +11,10 @@ describe("query", function() {
 	beforeEach(function() {
 		deferred = [];
 
+		var p = 0
 		function newPromise () {
+			console.log('here',p);
+			p++;
 			var defer = q.defer();
 			deferred.push(defer);
 			return defer;
@@ -25,6 +29,9 @@ describe("query", function() {
 	});
 
 	afterEach(function() {
+		_.each(deferred,function (def) {
+			def.resolve();
+		})
 	  urltreiver.reset();
 	});
 
@@ -45,6 +52,7 @@ describe("query", function() {
 		it("when called again after the urltreiver resolves", function() {
 		  var result = query.launchQ('url');
 		  expect(result).toBeTruthy();
+
 		  var result = query.launchQ('url');
 		  expect(result).not.toBeTruthy();
 
@@ -53,41 +61,9 @@ describe("query", function() {
 				expect(result).toEqual('text');
 			})
 			deferred[0].resolve('text');
+
 		});
 
-		describe("when the urltreiver resolves", function() {
-
-			it("should have called parser.fromXml()", function() {
-				parser.fromXml = sinon.stub().returns([]);
-
-			  var result = query.launchQ('url');
-			  expect(parser.fromXml).not.toHaveBeenCalled();				
-
-				deferred[0].promise.then(function() {
-				  expect(parser.fromXml).toHaveBeenCalled();				
-				})
-  			deferred[0].resolve('text');
-			});
-
-			describe("and parser returns {'isEvent':true}", function() {
-			  it('should return an array containing the url',function () {
-	  			parser.process = sinon.stub().returns({'isEvent':true});
-	  		  var result = query.launchQ('url');
-
-					deferred[0].promise.then(function() {
-					  var result = query.launchQ('url');
-					  expect(result).toEqual(['url']);
-					})
-	  			deferred[0].resolve('text');
-			  });
-			});
-
-			xdescribe("and parser returns {urls:['test']}", function() {
-			  it("should call urltreiver with 'test'", function() {
-	  	    
-			  });
-			});
-		});
 	});
 
 	describe(".loadUrl(url)", function() {
@@ -96,5 +72,36 @@ describe("query", function() {
 		  query.loadUrl('url');
 		  expect(urltreiver).toHaveBeenCalled()
 		});
+
+
+		describe("when the urltreiver resolves", function() {
+
+			it("should have called parser.fromXml()", function() {
+				parser.fromXml = sinon.stub().returns([]);
+
+			  var result = query.loadUrl('url',0);
+			  expect(parser.fromXml).not.toHaveBeenCalled();				
+
+				deferred[0].promise.then(function() {
+				  expect(parser.fromXml).toHaveBeenCalled();				
+				})
+  			deferred[0].resolve('text');
+			});
+
+			xdescribe("and parser returns {'isEvent':true}", function() {
+			  it('should return an array containing the url',function () {
+	  			parser.process = sinon.stub().returns({'isEvent':true});
+	  		  var result = query.loadUrl('url',0);
+
+					deferred[0].promise.then(function() {
+					  var result = query.loadUrl('url',0);
+					  expect(result).toEqual(['url']);
+					})
+	  			deferred[0].resolve('text');
+			  });
+			});
+
+		});
+
 	});
 });
